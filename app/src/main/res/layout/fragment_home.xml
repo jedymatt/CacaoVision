@@ -17,16 +17,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/camera_button"
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Use Camera"
             app:icon="@drawable/ic_baseline_camera_24" />
-        />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/browse_gallery_button"
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
