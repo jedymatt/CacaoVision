@@ -1,6 +1,8 @@
 package com.jedymatt.cacaovision
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -9,10 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.jedymatt.cacaovision.databinding.FragmentCameraBinding
 import org.tensorflow.lite.task.gms.vision.detector.Detection
 import java.util.*
@@ -34,6 +38,16 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
     private var camera: Camera? = null
     private var cameraProvider: ProcessCameraProvider? = null
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            Toast.makeText(context, "Permission request granted", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(context, "Permission request denied", Toast.LENGTH_LONG).show()
+        }
+    }
+
     /** Blocking camera operations are performed using this executor */
     private lateinit var cameraExecutor: ExecutorService
 
@@ -41,6 +55,12 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         super.onResume()
 
         // check permission
+        if (!PermissionsFragment.hasPermissions(requireContext())) {
+            Navigation.findNavController(requireActivity(), R.id.camera_fragment_container)
+                .navigate(
+                    CameraFragmentDirections.actionCameraFragmentToPermissionsFragment()
+                )
+        }
     }
 
     override fun onDestroyView() {
@@ -48,6 +68,18 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         super.onDestroyView()
 
         cameraExecutor.shutdown()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
     }
 
     override fun onCreateView(

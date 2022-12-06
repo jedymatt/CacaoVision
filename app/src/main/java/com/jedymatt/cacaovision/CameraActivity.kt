@@ -1,7 +1,12 @@
 package com.jedymatt.cacaovision
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 
 class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

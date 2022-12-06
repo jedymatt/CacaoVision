@@ -86,3 +86,6 @@ lint/tmp/
 
 # Tflite
 *.tflite
+
+# Files generated when building release.apk
+app/release/

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -38,10 +39,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-
-    androidResources {
-        noCompress 'tfile'
-    }
 }
 
 dependencies {
@@ -50,6 +47,18 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.5.1'
+
+    // Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+
+    // Fragment
+    implementation 'androidx.fragment:fragment-ktx:1.5.4'
+
+    // Navigation
+    implementation 'androidx.navigation:navigation-runtime-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
 
     // CameraX
     implementation 'androidx.camera:camera-core:1.1.0'
@@ -59,7 +68,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
 
     // Tensorflow Lite
-    implementation 'org.tensorflow:tensorflow-lite-task-vision-play-services:0.4.2'
+    implementation 'org.tensorflow:tensorflow-lite-task-vision-play-services:0.4.3'
     implementation 'com.google.android.gms:play-services-tflite-gpu:16.1.0'
 
 

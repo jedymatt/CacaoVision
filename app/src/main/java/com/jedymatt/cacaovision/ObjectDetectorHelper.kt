@@ -29,7 +29,6 @@ class ObjectDetectorHelper(
     private val modelPath = "mobilenetv1.tflite"
 
     init {
-
         TfLiteGpu.isGpuDelegateAvailable(context).onSuccessTask { gpuAvailable: Boolean ->
             val optionsBuilder = TfLiteInitializationOptions.builder()
             if (gpuAvailable) {
@@ -52,9 +51,9 @@ class ObjectDetectorHelper(
             Log.e(TAG, "setupObjectDetector: TfLiteVision is not initialized yet")
         }
 
-        val optionsBuilder = ObjectDetector.ObjectDetectorOptions.builder()
-            .setScoreThreshold(threshold)
-            .setMaxResults(maxResults)
+        val optionsBuilder =
+            ObjectDetector.ObjectDetectorOptions.builder().setScoreThreshold(threshold)
+                .setMaxResults(maxResults)
 
         val baseOptionsBuilder = BaseOptions.builder().setNumThreads(numThreads)
 
@@ -78,13 +77,10 @@ class ObjectDetectorHelper(
 
         try {
             objectDetector = ObjectDetector.createFromFileAndOptions(
-                context,
-                modelPath,
-                optionsBuilder.build()
+                context, modelPath, optionsBuilder.build()
             )
         } catch (e: Exception) {
-            objectDetectorListener
-                .onError("Object detector failed to initialize. See error logs for details")
+            objectDetectorListener.onError("Object detector failed to initialize. See error logs for details")
             Log.e(TAG, "TFLite failed to load model with error: " + e.message)
         }
     }
@@ -108,10 +104,7 @@ class ObjectDetectorHelper(
         val results = objectDetector?.detect(tensorImage)
         inferenceTime = SystemClock.uptimeMillis() - inferenceTime
         objectDetectorListener.onResults(
-            results,
-            inferenceTime,
-            tensorImage.height,
-            tensorImage.width
+            results, inferenceTime, tensorImage.height, tensorImage.width
         )
     }
 
