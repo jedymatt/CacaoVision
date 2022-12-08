@@ -37,6 +37,8 @@ class HomeFragment : Fragment() {
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imgUri)
                 }
 
+                // TODO: Redirect to another activity that evaluates the image
+
                 runObjectDetection(image)
             }
         }
