@@ -32,16 +32,18 @@ class PermissionsFragment : Fragment() {
             ContextCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                lifecycleScope.launchWhenCreated {
-                    Navigation.findNavController(requireActivity(), R.id.camera_fragment_container)
-                        .navigate(
-                            PermissionsFragmentDirections.actionPermissionsFragmentToCameraFragment()
-                        )
-                }
+                navigateToCamera()
             }
             else -> {
                 requestPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
+        }
+    }
+
+    private fun navigateToCamera() {
+        lifecycleScope.launchWhenStarted {
+            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
+                PermissionsFragmentDirections.actionPermissionsFragmentToCameraFragment())
         }
     }
 
