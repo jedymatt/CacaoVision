@@ -37,9 +37,7 @@ class HomeFragment : Fragment() {
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imgUri)
                 }
 
-//                lifecycleScope.launch(Dispatchers.Default) {
                 runObjectDetection(image)
-//                }
             }
         }
 
