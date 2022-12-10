@@ -3,16 +3,13 @@ package com.jedymatt.cacaovision
 import android.graphics.*
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tflite.client.TfLiteInitializationOptions
 import com.google.android.gms.tflite.gpu.support.TfLiteGpu
-import kotlinx.coroutines.launch
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.gms.vision.TfLiteVision
 import org.tensorflow.lite.task.gms.vision.detector.Detection
@@ -76,8 +73,7 @@ class ImageResultActivity : AppCompatActivity() {
     }
 
     private fun drawDetectionResult(
-        bitmap: Bitmap,
-        detectionResults: List<Detection>
+        bitmap: Bitmap, detectionResults: List<Detection>
     ): Bitmap {
         val outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(outputBitmap)
@@ -103,7 +99,8 @@ class ImageResultActivity : AppCompatActivity() {
             pen.textSize = 96f
 
             val firstCategory = it.categories.first()
-            val text = firstCategory.label + " " + String.format("%.2f", firstCategory.score * 100.0) + "%"
+            val text =
+                firstCategory.label + " " + String.format("%.2f", firstCategory.score * 100.0) + "%"
             pen.getTextBounds(text, 0, text.length, tagSize)
             val fontSize: Float = pen.textSize * box.width() / tagSize.width()
 
@@ -113,8 +110,7 @@ class ImageResultActivity : AppCompatActivity() {
             var margin = (box.width() - tagSize.width()) / 2.0F
             if (margin < 0F) margin = 0F
             canvas.drawText(
-                text, box.left + margin,
-                box.top + tagSize.height().times(1F), pen
+                text, box.left + margin, box.top + tagSize.height().times(1F), pen
             )
         }
         return outputBitmap
