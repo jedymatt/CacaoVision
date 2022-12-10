@@ -3,6 +3,7 @@ package com.jedymatt.cacaovision
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.media.Image
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,51 +22,15 @@ import org.tensorflow.lite.task.gms.vision.detector.ObjectDetector
 
 
 class HomeFragment : Fragment() {
-    private val TAG = "HomeFragement"
 
     private val fileChooser =
         registerForActivityResult(ActivityResultContracts.GetContent()) { imgUri ->
             if (imgUri != null) {
-                // get image from imgUri
-                var image: Bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(
-                            requireContext().contentResolver, imgUri
-                        )
-                    ).copy(Bitmap.Config.ARGB_8888, true)
-                } else {
-                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imgUri)
-                }
-
-                // TODO: Redirect to another activity that evaluates the image
-
-                runObjectDetection(image)
+                val intent = Intent(requireContext(), ImageResultActivity::class.java)
+                intent.putExtra("image_uri", imgUri)
+                startActivity(intent)
             }
         }
-
-    private fun runObjectDetection(bitmap: Bitmap) {
-
-        TfLiteGpu.isGpuDelegateAvailable(context).onSuccessTask { gpuAvailable: Boolean ->
-            val optionsBuilder = TfLiteInitializationOptions.builder()
-            if (gpuAvailable) {
-                optionsBuilder.setEnableGpuDelegateSupport(true)
-            }
-            TfLiteVision.initialize(context, optionsBuilder.build())
-        }.addOnSuccessListener {
-            val image = TensorImage.fromBitmap(bitmap)
-
-            val options = ObjectDetector.ObjectDetectorOptions.builder().setMaxResults(5)
-                .setScoreThreshold(0.5f).build()
-            val detector = ObjectDetector.createFromFileAndOptions(
-                requireContext(), "mobilenetv1.tflite", options
-            )
-
-            val results = detector.detect(image)
-            Log.i(TAG, results.toString())
-        }.addOnFailureListener {
-            Log.e(TAG, "TfLiteVision failed to initialize: " + it.message)
-        }
-    }
 
 
     override fun onCreateView(
@@ -93,6 +58,10 @@ class HomeFragment : Fragment() {
         browseGalleryButton.setOnClickListener {
             fileChooser.launch("image/*")
         }
+    }
+
+    companion object {
+        private val TAG = "HomeFragment"
     }
 }
 
