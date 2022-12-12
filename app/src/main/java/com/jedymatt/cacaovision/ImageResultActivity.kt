@@ -62,7 +62,9 @@ class ImageResultActivity : AppCompatActivity() {
 
             Log.i(TAG, detector.detect(image).joinToString(System.lineSeparator()))
 
-            val resultImg = drawDetectionResult(bitmap, detector.detect(image))
+            val results = detector.detect(image)
+
+            val resultImg = drawDetectionResult(bitmap, results)
 
             val imagePreview = findViewById<ImageView>(R.id.imageView)
             imagePreview.setImageBitmap(resultImg)
