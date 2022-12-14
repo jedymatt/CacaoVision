@@ -158,6 +158,9 @@ class CameraFragment : Fragment(), ObjectDetectorHelper.DetectorListener {
         results: MutableList<Detection>?, inferenceTime: Long, imageHeight: Int, imageWidth: Int
     ) {
         activity?.runOnUiThread {
+            if (_fragmentCameraBinding == null) {
+                return@runOnUiThread
+            }
             // Pass necessary information to OverlayView for drawing on the canvas
             fragmentCameraBinding.overlay.setResults(
                 results ?: LinkedList<Detection>(), imageHeight, imageWidth
